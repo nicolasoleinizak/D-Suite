@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ProductsCategory;
 use App\Models\Organization;
 
-class Product extends Seeder
+class ProductSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
-class Organization extends Seeder
+class OrganizationUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,9 +15,6 @@ class Organization extends Seeder
      */
     public function run()
     {
-        DB::table('organizations')->delete();
-        DB::table('organizations')->insert([
-            'name' => 'Dulceres'
-        ]);
+        
     }
 }

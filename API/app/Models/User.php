@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -63,5 +64,27 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public static function initializePermissions($organization_id, $user_id, $isAdmin = false){
+        $modules = Module::all();
+        foreach($modules as $module){
+            if($module->id == 1 && $isAdmin){
+                DB::table('permissions')->insert([
+                    'organization_id' => $organization_id,
+                    'module_id' => $module->id,
+                    'user_id' =>  $user_id,
+                    'permission_level' => 2
+                ]);
+            }
+            else{
+                DB::table('permissions')->insert([
+                    'organization_id' => $organization_id,
+                    'module_id' => $module->id,
+                    'user_id' =>  $user_id,
+                    'permission_level' => 0
+                ]);
+            }
+        }
     }
 }

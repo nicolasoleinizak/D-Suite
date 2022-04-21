@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Module;
 
 class UserController extends Controller
 {
@@ -36,11 +39,15 @@ class UserController extends Controller
         ]);
         $newUser = new User;
         $newUser->email = $request->email;
-        $newUser->password = $request->password;
+        $newUser->password = Hash::make($request->password);
         $newUser->name = $request->name;
         $newUser->created_at = time();
         $newUser->updated_at = time();
         $newUser->save();
         return response()->json(['message' => 'The user was registered successfully']);
+    }
+
+    public function isAdmin($user_id, $organization_id){
+        return Permission::where(['organization_id', $organization_id], ['module_id', 1]) -> permission_level == 2;
     }
 }

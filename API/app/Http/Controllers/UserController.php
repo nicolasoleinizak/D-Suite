@@ -50,4 +50,12 @@ class UserController extends Controller
     public function isAdmin($user_id, $organization_id){
         return Permission::where(['organization_id', $organization_id], ['module_id', 1]) -> permission_level == 2;
     }
+
+    public function getPermissions(Request $request){
+        $user = User::find(Auth::guard()->user()->id);
+        return response()->json([
+            'permissions' => $user->getPermissions($request->organization_id),
+            'isAdmin' => $user->isAdmin($request->organization_id)
+        ]);
+    }
 }

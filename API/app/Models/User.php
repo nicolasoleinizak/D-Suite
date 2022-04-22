@@ -66,14 +66,23 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public static function initializePermissions($organization_id, $user_id, $isAdmin = false){
+    public function isAdmin($organization_id){
+        $system_admin_permission = Permission::where([
+            'user_id' => $this->id,
+            'organization_id' => $organization_id,
+            'module_id' => 1
+        ])->get()[0]->permission_level;
+        return $system_admin_permission == 2;
+    }
+
+    public function initializePermissions($organization_id, $isAdmin = false){
         $modules = Module::all();
         foreach($modules as $module){
             if($module->id == 1 && $isAdmin){
                 DB::table('permissions')->insert([
                     'organization_id' => $organization_id,
                     'module_id' => $module->id,
-                    'user_id' =>  $user_id,
+                    'user_id' =>  $this->id,
                     'permission_level' => 2
                 ]);
             }
@@ -81,10 +90,19 @@ class User extends Authenticatable implements JWTSubject
                 DB::table('permissions')->insert([
                     'organization_id' => $organization_id,
                     'module_id' => $module->id,
-                    'user_id' =>  $user_id,
+                    'user_id' =>  $this->id,
                     'permission_level' => 0
                 ]);
             }
         }
+    }
+
+    public function getPermissions($organization_id){
+        foreach($this->organizations as $organization){
+            if($organization->id == $organization_id){
+                return Permission::where('user_id', $this->id)->where('organization_id', $organization_id)->get();
+            }
+        }
+        return [];
     }
 }

@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'organization_id' => $organization_id
         ]);
 
-        User::initializePermissions($organization_id, $admin->id, true);
+        $admin->initializePermissions($organization_id, true);
 
         $regular_user = new User;
         $regular_user->name = 'Regular user';
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'organization_id' => $organization_id
         ]);
 
-        User::initializePermissions($organization_id, $regular_user->id, false);
+        $regular_user->initializePermissions($organization_id, false);
     }
 
 }

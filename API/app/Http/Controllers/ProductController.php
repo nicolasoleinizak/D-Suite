@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -12,9 +13,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return json_encode(Product::all());
+        return response()->json(['data' => Product::where([
+            'organization_id' => $request->organization_id
+            ])->get()]);
     }
 
     /**
@@ -44,9 +47,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function retrieve(Request $request)
     {
-        //
+        return response()->json(['data' => Product::where([
+            'id' => $request->product_id,
+            'organization_id' => $request->organization_id
+            ])->get()]);
     }
 
     /**

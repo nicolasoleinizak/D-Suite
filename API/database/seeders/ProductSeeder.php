@@ -22,22 +22,21 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'short_description' => 'Caja de 12 alfajores',
-                'products_category_id' => ProductsCategory::where('name', 'alfajores')->first()->id,
+                'products_categories_id' => [ProductsCategory::where('name', 'alfajores')->first()->id],
                 'organization_id' => Organization::all()->first()->id
             ],
             [
                 'short_description' => 'Caja de 6 alfajores',
-                'products_category_id' => ProductsCategory::where('name', 'alfajores')->first()->id,
+                'products_categories_id' => [ProductsCategory::where('name', 'alfajores')->first()->id],
                 'organization_id' => Organization::all()->first()->id
             ]
         ];
 
         foreach($products as $product){
-            DB::table('products')->insert([
-                'short_description' => $product['short_description'],
-                'products_category_id' => $product['products_category_id'],
-                'organization_id' => $product['organization_id']
-            ]);
+            $new_product = new Product;
+            $new_product->short_description = $product['short_description'];
+            $new_product->organization_id = $product['organization_id'];
+            $new_product->assignCategories($product['products_categories_id']);
         }
     }
 }

@@ -16,4 +16,13 @@ class Product extends Model
         'products_category_id',
         'organization_id'
     ];
+
+    public function assignCategories(Array $categories_ids){
+        foreach($categories_ids as $category_id){
+            DB::table('products_category_product')->insert([
+                'product_id' => $this->id,
+                'products_category_id' => $category_id
+            ]);
+        }
+    }
 }

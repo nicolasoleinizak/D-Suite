@@ -91,7 +91,7 @@ class User extends Authenticatable implements JWTSubject
                     'organization_id' => $organization_id,
                     'module_id' => $module->id,
                     'user_id' =>  $this->id,
-                    'permission_level' => 0
+                    'permission_level' => $isAdmin? 2:0
                 ]);
             }
         }

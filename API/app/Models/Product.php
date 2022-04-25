@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -19,10 +20,14 @@ class Product extends Model
 
     public function assignCategories(Array $categories_ids){
         foreach($categories_ids as $category_id){
-            DB::table('products_category_product')->insert([
+            DB::table('product_products_category')->insert([
                 'product_id' => $this->id,
                 'products_category_id' => $category_id
             ]);
         }
+    }
+
+    public function categories(){
+        return $this->belongsToMany(ProductsCategory::class);
     }
 }

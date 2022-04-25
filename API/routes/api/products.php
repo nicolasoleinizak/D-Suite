@@ -11,8 +11,14 @@ Route::controller(ProductController::class)->group(function(){
      * - The id of the module to access
      * - The level of access required (1 for reading, 2 for writing, or 0 for no permission req. -no recomended)
      */
-    Route::middleware(['api', 'has.permission:2,1'])->group(function () {
-        Route::get('/{organization_id}/products', 'index');
-        Route::get('/{organization_id}/products/{product_id}', 'retrieve');
+    Route::middleware(['api'])->group(function () {
+        Route::middleware(['has.permission:1,1'])->group(function () {
+            Route::get('/{organization_id}/products', 'index');
+            Route::get('/{organization_id}/products/{product_id}', 'retrieve');
+        });
+        Route::middleware(['has.permission:2,1'])->group(function () {
+            Route::post('/{organization_id}/products/', 'create');
+            Route::put('/{organization_id}/products/{product_id}', 'update');
+        });
     });
 });

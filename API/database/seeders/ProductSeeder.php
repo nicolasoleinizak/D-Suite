@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductsCategory;
 use App\Models\Organization;
+use App\Models\Product;
 
 class ProductSeeder extends Seeder
 {
@@ -36,6 +37,7 @@ class ProductSeeder extends Seeder
             $new_product = new Product;
             $new_product->short_description = $product['short_description'];
             $new_product->organization_id = $product['organization_id'];
+            $new_product->save();
             $new_product->assignCategories($product['products_categories_id']);
         }
     }

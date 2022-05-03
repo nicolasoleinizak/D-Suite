@@ -75,6 +75,15 @@ class User extends Authenticatable implements JWTSubject
         return $system_admin_permission == 2;
     }
 
+    /**
+     * It takes an organization id and a boolean value and inserts a row into the permissions table for
+     * each module in the modules table. 
+     * 
+     * The permission level is set to 2 if the user can write, 1 if the user can only read. 
+     * 
+     * @param organization_id The id of the organization that the user is being added to.
+     * @param isAdmin boolean
+     */
     public function initializePermissions($organization_id, $isAdmin = false){
         $modules = Module::all();
         foreach($modules as $module){
@@ -97,12 +106,34 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
-    public function getPermissions($organization_id){
-        foreach($this->organizations as $organization){
-            if($organization->id == $organization_id){
-                return Permission::where('user_id', $this->id)->where('organization_id', $organization_id)->get();
-            }
+    public function updatePermissions($organization_id, Array $permissions_by_module){
+        foreach($permissions_by_module as $new_permission){
+            $permission = Permission::where([
+                'user_id' => $this->id,
+                'organization_id' => $organization_id,
+                'module_id' => $new_permission['module_id']
+            ])->first();
+            $permission->permission_level = $new_permission['permission_level'];
+            $permission->save();
         }
-        return [];
+    }
+
+    public function getPermissions($organization_id){
+        $permissions = Permission::where([
+            'user_id' => $this->id,
+            'organization_id'=> $organization_id
+        ])->get();
+
+        $parsed_permissions = $permissions->map(function($item){
+            return [
+                'module_id' => $item->module_id,
+                'module' => Module::where('id', $item->module_id)->get()->first()->name,
+                'permission_level' => $item->permission_level,
+                'permission_type' => $item->permission_level == 1? 'reading' : 'writing'
+            ];
+        })->all();
+
+        return $parsed_permissions;
+
     }
 }

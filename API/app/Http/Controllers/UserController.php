@@ -58,4 +58,10 @@ class UserController extends Controller
             'isAdmin' => $user->isAdmin($request->organization_id)
         ]);
     }
+
+    public function updatePermissions(Request $request){
+        $user = User::find($request->user_id);
+        $user->updatePermissions($request->organization_id, $request->permissions);
+        return response()->json(['message' => 'The permissions was successfully updated']);
+    }
 }

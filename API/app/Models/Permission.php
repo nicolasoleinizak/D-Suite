@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Permission extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'organization_id',
+        'user_id',
+        'module_id',
+        'permission_level'
+    ];
+
 }

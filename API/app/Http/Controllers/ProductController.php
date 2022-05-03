@@ -57,15 +57,17 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function retrieve(Request $request)
     {
-        return response()->json(['data' => Product::where([
+        $product = Product::where([
             'id' => $request->product_id,
             'organization_id' => $request->organization_id
-            ])->get()]);
+        ])->with('categories')->get();
+
+        return response()->json(['data' => $product]);
     }
 
     /**
@@ -83,7 +85,6 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -97,23 +98,31 @@ class ProductController extends Controller
         $product = Product::where([
             'id' => $request->product_id,
             'organization_id' => $request->organization_id
-        ]);
+        ])->get()->first();
 
         $product->short_description = $request->short_description;
         $product->long_description = $request->long_description;
+
         $product->save();
+
         $product->assignCategories($request->categories);
+        return response()->json(['data' => $product]);
 
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
-        //
+        Product::where([
+            'id' => $request->product_id,
+            'organization_id' => $request->organization_id
+        ])->delete();
+
+        return response()->json(['message' => 'The product was deleted successfully']);
     }
 }

@@ -12,7 +12,7 @@ Route::controller(AuthController::class)->group(function(){
     ], function ($router) {
 
         Route::post('/login', 'login');
-        Route::post('/me', 'me');
+        Route::get('/me', 'me');
         Route::post('/logout', 'logout');
 
     });

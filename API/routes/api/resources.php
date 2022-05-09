@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Controllers\ResourceController;
-use App\Controllers\ResourcesCategoryController;
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\ResourcesCategoryController;
 
 Route::middleware(['api'])->group( function () {
-    Route::controller([ResourceController::class])->group( function () {
+    Route::controller(ResourceController::class)->group( function () {
         Route::middleware(['has.permission:4,1'])->group( function () {
             Route::get('/{organization_id}/resources/', 'index');
             Route::get('/{organization_id}/resources/{id}', 'retrieve');
@@ -16,7 +16,7 @@ Route::middleware(['api'])->group( function () {
             Route::delete('/{organization_id}/resources/{id}', 'destroy');
         });
     });
-    Route::controller([ResourcesCategoryController::class])->group( function () {
+    Route::controller(ResourcesCategoryController::class)->group( function () {
         Route::middleware(['has.permission:4,1'])->group( function () {
             Route::get('/{organization_id}/resources_categories/', 'index');
             Route::get('/{organization_id}/resources_categories/{id}', 'retrieve');

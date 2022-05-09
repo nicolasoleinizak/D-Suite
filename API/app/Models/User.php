@@ -66,6 +66,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function isAdmin($organization_id){
         $system_admin_permission = Permission::where([
             'user_id' => $this->id,
@@ -85,6 +90,12 @@ class User extends Authenticatable implements JWTSubject
      * @param isAdmin boolean
      */
     public function initializePermissions($organization_id, $isAdmin = false){
+
+        DB::table('organization_user')->insertGetId([
+            'user_id' => $this->id,
+            'organization_id' => $organization_id
+        ]);
+
         $modules = Module::all();
         foreach($modules as $module){
             if($module->id == 1 && $isAdmin){

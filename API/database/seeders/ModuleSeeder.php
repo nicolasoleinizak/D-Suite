@@ -19,7 +19,7 @@ class ModuleSeeder extends Seeder
             'system_administration',
             'products',
             'clients',
-            'supplies',
+            'resources',
             'suppliers'
         ];
 

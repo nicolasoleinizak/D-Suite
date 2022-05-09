@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('short_description');
             $table->string('long_description')->nullable();
             $table->timestamps();
-            $table->foreignId('organization_id')->constrained('organizations');
+            $table  ->foreignId('organization_id')
+                    ->constrained('organizations')
+                    ->onDelete('cascade');
         });
     }
 

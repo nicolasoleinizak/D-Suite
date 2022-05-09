@@ -35,6 +35,9 @@ class RouteServiceProvider extends ServiceProvider
                     require(base_path('routes/api/products.php'));
                     require(base_path('routes/api/auth.php'));
                     require(base_path('routes/api/user.php'));
+                    require(base_path('routes/api/organization.php'));
+                    require(base_path('routes/api/licenses.php'));
+                    require(base_path('routes/api/resources.php'));
                 });
 
             Route::middleware('web')

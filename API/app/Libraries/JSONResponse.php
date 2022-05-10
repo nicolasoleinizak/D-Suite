@@ -8,7 +8,7 @@ class JSONResponse{
     public $message = "";
     public $data;
 
-    function __construct (array $status, iterable $data = []) {
+    function __construct (array $status, $data = []) {
 
         $this->data = $data;
 

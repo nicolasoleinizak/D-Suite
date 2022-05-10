@@ -23,14 +23,18 @@ class HasPermission
     {
         $user_id = Auth::guard()->user()->id;
 
-        $permission_level = Permission::where([
+        $permission = Permission::where([
             'user_id' => $user_id,
             'organization_id' => $request->organization_id,
             'module_id' => $module_id
-        ])->get()[0]->permission_level;
+        ])->first();
 
-        if($permission_level >= $required_permission_level){
-            return $next($request);
+        if($permission){
+            if($permission->permission_level >= $required_permission_level){
+                return $next($request);
+            } else {
+                return response()->json(['message' => 'The user has not permission to access this module']);
+            }
         } else {
             return response()->json(['message' => 'The user has not permission to access this module']);
         }

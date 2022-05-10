@@ -11,7 +11,7 @@ class ErrorMessage{
         'AUT004' => 'The user has not permissions to write on this module',
         'AUT005' => 'The user has not superadmin permissions',
         'REQ001' => 'There is an error with the information provided, or the information is not enought',
-        'REQ002' => 'The required information was not found no the database',
+        'REQ002' => 'The required information was not found on the database',
         'REQ003' => 'The id provided does not match with the organization',
         'SRV001' => 'Internal server error'
     ];

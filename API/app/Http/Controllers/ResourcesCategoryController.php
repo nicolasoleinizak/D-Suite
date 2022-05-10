@@ -26,6 +26,17 @@ class ResourcesCategoryController extends Controller
 
     public function retrieve (Request $request) {
 
+        $category = ResourcesCategory::where([
+            'id' => $request->id,
+            'organization_id' => $request->organization_id
+        ])->first();
+
+        if(!$category){
+            return response()->json(new JSONResponse(['success' => false, 'error_code' => 'REQ002']));
+        } else {
+            return response()->json(new JSONResponse([], $category));
+        }
+
     }
 
     public function create (Request $request) {

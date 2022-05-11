@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ResourcesCategory;
 use App\Libraries\JSONResponse;
+use App\Libraries\Jasonres;
 
 class ResourcesCategoryController extends Controller
 {
@@ -21,7 +22,7 @@ class ResourcesCategoryController extends Controller
             'organization_id' => $request->organization_id
         ])->get();
 
-        return response()->json(new JSONResponse([], $categories));
+        return Jasonres::respond([], $categories);
     }
 
     public function retrieve (Request $request) {
@@ -32,15 +33,25 @@ class ResourcesCategoryController extends Controller
         ])->first();
 
         if(!$category){
-            return response()->json(new JSONResponse(['success' => false, 'error_code' => 'REQ002']));
+            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002']);
         } else {
-            return response()->json(new JSONResponse([], $category));
+            return Jasonres::respond([], $category);
         }
 
     }
 
     public function create (Request $request) {
 
+        $validationData = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $new_category = new ResourcesCategory;
+        $new_category->name = $request->name;
+        $new_category->organization_id = $request->organization_id;
+        if($new_category->save()){
+            return Jasonres::respond([], $new_category);
+        }
     }
 
     public function update (Request $request) {

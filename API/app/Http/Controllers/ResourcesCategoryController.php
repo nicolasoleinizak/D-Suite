@@ -60,5 +60,20 @@ class ResourcesCategoryController extends Controller
 
     public function destroy (Request $request) {
 
+        $category = ResourcesCategory::where([
+            'id' => $request->id,
+            'organization_id' => $request->organization_id
+        ]);
+
+        if($category){
+            if($category->delete()){
+                return Jasonres::respond(['message' => 'Successfully deleted'], []);
+            } else {
+                return Jasonres::respond(['success' => false, 'error_code' => 'SRV001'], []);
+            }
+        } else {
+            return Jasonres::respond(['success' => false, 'error_code' => 'REQ001'], []);
+        }
+
     }
 }

@@ -22,7 +22,7 @@ class ResourcesCategoryController extends Controller
             'organization_id' => $request->organization_id
         ])->get();
 
-        return Jasonres::respond([], $categories);
+        return Jasonres::success('', $categories);
     }
 
     public function retrieve (Request $request) {
@@ -33,9 +33,9 @@ class ResourcesCategoryController extends Controller
         ])->first();
 
         if(!$category){
-            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002']);
+            return Jasonres::error('REQ002');
         } else {
-            return Jasonres::respond([], $category);
+            return Jasonres::success('', $category);
         }
 
     }
@@ -50,7 +50,7 @@ class ResourcesCategoryController extends Controller
         $new_category->name = $request->name;
         $new_category->organization_id = $request->organization_id;
         if($new_category->save()){
-            return Jasonres::respond([], $new_category);
+            return Jasonres::success('Category successfully created', $new_category);
         }
     }
 
@@ -68,12 +68,12 @@ class ResourcesCategoryController extends Controller
         if($category){
             $category->name = $request->name;
             if($category->save()){
-                return Jasonres::respond(['message' => 'Resource category successfully updated'], $category);
+                return Jasonres::success('Resource category successfully updated', $category);
             } else{
-                return Jasonres::response(['success' => false, 'error_code' => 'SRV001']);
+                return Jasonres::error('SRV001');
             }
         } else {
-            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002']);
+            return Jasonres::error('REQ002');
         }
 
     }
@@ -87,12 +87,12 @@ class ResourcesCategoryController extends Controller
 
         if($category){
             if($category->delete()){
-                return Jasonres::respond(['message' => 'Successfully deleted'], []);
+                return Jasonres::success('Successfully deleted', []);
             } else {
-                return Jasonres::respond(['success' => false, 'error_code' => 'SRV001'], []);
+                return Jasonres::error('SRV001');
             }
         } else {
-            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002'], []);
+            return Jasonres::error('REQ002');
         }
 
     }

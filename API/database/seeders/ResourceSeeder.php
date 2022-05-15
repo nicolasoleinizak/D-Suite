@@ -25,19 +25,27 @@ class ResourceSeeder extends Seeder
                 'name' => 'harina',
                 'price' => 115,
                 'unit' => 'kg',
-                'category' => 'materias primas'
+                'category' => 'materias primas',
+                'suppliers' => [
+                    1
+                ]
             ],
             [
                 'name' => 'azúcar',
                 'price' => 86,
                 'unit' => 'kg',
-                'category' => 'materias primas'
+                'category' => 'materias primas',
+                'suppliers' => [
+                    2
+                ]
             ],
             [
                 'name' => 'mano de obra',
                 'price' => 450,
                 'unit' => 'h',
-                'category' => 'mano de obra'
+                'category' => 'mano de obra',
+                'suppliers' => [
+                ]
             ]
         ];
 
@@ -60,6 +68,13 @@ class ResourceSeeder extends Seeder
                 'resource_id' => $new_resource->id,
                 'resources_category_id' => $category_id
             ]);
+
+            foreach($resource['suppliers'] as $supplier){
+                DB::table('resource_supplier')->insert([
+                    'resource_id' => $new_resource->id,
+                    'supplier_id' => $supplier
+                ]);
+            }
         }
     }
 }

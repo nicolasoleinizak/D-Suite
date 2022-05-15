@@ -56,6 +56,26 @@ class ResourcesCategoryController extends Controller
 
     public function update (Request $request) {
 
+        $validationData = $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $category = ResourcesCategory::where([
+            'id' => $request->id,
+            'organization_id' => $request->organization_id
+        ])->first();
+
+        if($category){
+            $category->name = $request->name;
+            if($category->save()){
+                return Jasonres::respond(['message' => 'Resource category successfully updated'], $category);
+            } else{
+                return Jasonres::response(['success' => false, 'error_code' => 'SRV001']);
+            }
+        } else {
+            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002']);
+        }
+
     }
 
     public function destroy (Request $request) {
@@ -63,7 +83,7 @@ class ResourcesCategoryController extends Controller
         $category = ResourcesCategory::where([
             'id' => $request->id,
             'organization_id' => $request->organization_id
-        ]);
+        ])->first();
 
         if($category){
             if($category->delete()){
@@ -72,7 +92,7 @@ class ResourcesCategoryController extends Controller
                 return Jasonres::respond(['success' => false, 'error_code' => 'SRV001'], []);
             }
         } else {
-            return Jasonres::respond(['success' => false, 'error_code' => 'REQ001'], []);
+            return Jasonres::respond(['success' => false, 'error_code' => 'REQ002'], []);
         }
 
     }

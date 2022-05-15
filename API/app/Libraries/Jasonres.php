@@ -31,5 +31,13 @@ class Jasonres{
         ]);
     }
 
+    public static function sendData($data){
+        if($data){
+            return self::success('', $data);
+        } else{
+            return self::error('REQ002');
+        }
+    }
+
     
 }

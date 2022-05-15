@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->integer('price');
             $table->string('unit');
+            $table  ->foreignId('organization_id')
+                    ->constrained('organizations')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }

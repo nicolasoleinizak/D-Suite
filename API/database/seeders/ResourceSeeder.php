@@ -41,9 +41,11 @@ class ResourceSeeder extends Seeder
             ]
         ];
 
+        $organization_id = Organization::first()->id;
+
         foreach($resources as $resource){
             $category_id = ResourcesCategory::where([
-                'organization_id' => Organization::all()->first()->id,
+                'organization_id' => $organization_id,
                 'name' => $resource['category']
             ])->first()->id;
 
@@ -51,9 +53,10 @@ class ResourceSeeder extends Seeder
             $new_resource->name = $resource['name'];
             $new_resource->price = $resource['price'];
             $new_resource->unit = $resource['unit'];
+            $new_resource->organization_id = $organization_id;
             $new_resource->save();
 
-            DB::table('resources_resources_categories')->insert([
+            DB::table('resource_resources_category')->insert([
                 'resource_id' => $new_resource->id,
                 'resources_category_id' => $category_id
             ]);

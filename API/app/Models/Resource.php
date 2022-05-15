@@ -11,10 +11,13 @@ class Resource extends Model
     use HasFactory;
 
     public function assignCategories($categories){
-        foreach($categories as $categorie){
+
+        DB::table('resource_resources_category')->where('resource_id', $this->id)->delete();
+
+        foreach($categories as $category){
             DB::table('resource_resources_category')->insert([
                 'resource_id' => $this->id,
-                'resources_category_id' => $category->id
+                'resources_category_id' => $category
             ]);
         }
     }

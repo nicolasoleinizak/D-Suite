@@ -19,6 +19,9 @@ class Product extends Model
     ];
 
     public function assignCategories(Array $categories_ids){
+
+        DB::table('product_products_category')->where('product_id', $this->id)->delete();
+
         foreach($categories_ids as $category_id){
             DB::table('product_products_category')->insert([
                 'product_id' => $this->id,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Libraries\Jasonres;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,9 +16,19 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(['data' => Product::where([
-            'organization_id' => $request->organization_id
-            ])->get()]);
+        try {
+            $products = Product::where([
+                'organization_id' => $request->organization_id
+            ])->get();
+
+            if($products){
+                return Jasonres::success('', $products);
+            } else {
+                return Jasonres::error('REQ002');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
+        }
     }
 
     /**
@@ -27,31 +38,28 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-        $validationData = $request->validate([
-            'short_description' => 'required',
-            'long_description' => 'string',
-            'categories' => 'required|array'
-        ]);
+        try {
+            $request->validate([
+                'short_description' => 'required',
+                'long_description' => 'string',
+                'categories' => 'required|array'
+            ]);
 
-        $new_product = new Product;
-        $new_product->short_description = $request->short_description;
-        $new_product->long_description = $request->long_description;
-        $new_product->organization_id = $request->organization_id;
-        $new_product->save();
-        $new_product->assignCategories($request->categories);
-        $new_product->categories;
-        return response()->json(['data' => $new_product]);
-    }
+            $new_product = new Product;
+            $new_product->short_description = $request->short_description;
+            $new_product->long_description = $request->long_description;
+            $new_product->organization_id = $request->organization_id;
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+            if($new_product->save()){
+                if($new_product->assignCategories($request->categories)){
+                    return Jasonres::success('Product created successfully', $new_product);
+                }
+            }
+
+            return Jasonres::error('SRV001');
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
+        }
     }
 
     /**
@@ -62,24 +70,22 @@ class ProductController extends Controller
      */
     public function retrieve(Request $request)
     {
-        $product = Product::where([
-            'id' => $request->product_id,
-            'organization_id' => $request->organization_id
-        ])->with('categories')->get();
+        try {
+            $product = Product::where([
+                'id' => $request->product_id,
+                'organization_id' => $request->organization_id
+            ])->with('categories')->get();
 
-        return response()->json(['data' => $product]);
+            if($product){
+                return Jasonres::success('', $product);
+            } else {
+                return Jasonres::error('REQ002');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -89,24 +95,33 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
-        $validationData = $request->validate([
-            'short_description' => 'required|string',
-            'long_description' => 'string',
-            'categories' => 'required|array'
-        ]);
+        try {
+            $validationData = $request->validate([
+                'short_description' => 'required|string',
+                'long_description' => 'string',
+                'categories' => 'required|array'
+            ]);
 
-        $product = Product::where([
-            'id' => $request->product_id,
-            'organization_id' => $request->organization_id
-        ])->get()->first();
+            $product = Product::where([
+                'id' => $request->product_id,
+                'organization_id' => $request->organization_id
+            ])->first();
 
-        $product->short_description = $request->short_description;
-        $product->long_description = $request->long_description;
-
-        $product->save();
-
-        $product->assignCategories($request->categories);
-        return response()->json(['data' => $product]);
+            if($product){
+                $product->short_description = $request->short_description;
+                $product->long_description = $request->long_description;
+                if($product->save()){
+                    if($product->assignCategories($request->categories)){
+                        return Jasonres::success('Product updated successfully', $product);
+                    }
+                }
+                return Jasonres::error('SRV001');
+            } else {
+                return Jasonres::error('REQ002');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
+        }
 
     }
 
@@ -118,11 +133,19 @@ class ProductController extends Controller
      */
     public function destroy(Request $request)
     {
-        Product::where([
-            'id' => $request->product_id,
-            'organization_id' => $request->organization_id
-        ])->delete();
-
-        return response()->json(['message' => 'The product was deleted successfully']);
+        try {
+            $product = Product::where([
+                'id' => $request->product_id,
+                'organization_id' => $request->organization_id
+            ]);
+    
+            if($product->delete()){
+                return Jasonres::success('Product successfully deleted');
+            } else {
+                return Jasonres::error('SRV001');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
+        }
     }
 }

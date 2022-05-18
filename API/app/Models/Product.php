@@ -20,13 +20,18 @@ class Product extends Model
 
     public function assignCategories(Array $categories_ids){
 
-        DB::table('product_products_category')->where('product_id', $this->id)->delete();
-
-        foreach($categories_ids as $category_id){
-            DB::table('product_products_category')->insert([
-                'product_id' => $this->id,
-                'products_category_id' => $category_id
-            ]);
+        try {
+            DB::table('product_products_category')->where('product_id', $this->id)->delete();
+    
+            foreach($categories_ids as $category_id){
+                DB::table('product_products_category')->insert([
+                    'product_id' => $this->id,
+                    'products_category_id' => $category_id
+                ]);
+            }
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 

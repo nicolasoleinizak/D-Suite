@@ -18,12 +18,12 @@ Route::controller(SupplierController::class)->group(function(){
     Route::middleware(['api'])->group(function () {
         Route::middleware(['has.permission:5,1'])->group(function () {
             Route::get('/{organization_id}/suppliers', 'index');
-            Route::get('/{organization_id}/suppliers/suppliers_id}', 'retrieve');
+            Route::get('/{organization_id}/suppliers/{id}', 'retrieve');
         });
         Route::middleware(['has.permission:5,1'])->group(function () {
             Route::post('/{organization_id}/suppliers/', 'create');
-            Route::put('/{organization_id}/suppliers/suppliers_id}', 'update');
-            Route::delete('/{organization_id}/suppliers/suppliers_id}', 'destroy');
+            Route::put('/{organization_id}/suppliers/{id}', 'update');
+            Route::delete('/{organization_id}/suppliers/{id}', 'destroy');
         });
     });
 });

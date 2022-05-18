@@ -5,6 +5,6 @@ use App\Http\Controllers\LicenseController;
 
 Route::controller(LicenseController::class)->group( function () {
     Route::middleware(['is.superadmin'])->group( function () {
-        Route::put('/licenses', 'update');
+        Route::put('{organization_id}/licenses/{module_id}', 'update');
     });
 });

@@ -41,6 +41,7 @@ class UserController extends Controller
         $newUser->email = $request->email;
         $newUser->password = Hash::make($request->password);
         $newUser->name = $request->name;
+        $newUser->role_id = 2;
         $newUser->created_at = time();
         $newUser->updated_at = time();
         $newUser->save();

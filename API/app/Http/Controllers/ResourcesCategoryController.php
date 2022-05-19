@@ -18,82 +18,107 @@ class ResourcesCategoryController extends Controller
      */
     public function index (Request $request) {
 
-        $categories = ResourcesCategory::where([
-            'organization_id' => $request->organization_id
-        ])->get();
+        try {
+            $categories = ResourcesCategory::where([
+                'organization_id' => $request->organization_id
+            ])->get();
+    
+            if($categories){
+                return Jasonres::success('', $categories);
+            } else {
+                return Jasonres::error('REQ002');
+            }
+        } catch (Exception $e){
+            return Jasonres::error('SRV001');
+        }
 
-        return Jasonres::success('', $categories);
     }
 
     public function retrieve (Request $request) {
 
-        $category = ResourcesCategory::where([
-            'id' => $request->id,
-            'organization_id' => $request->organization_id
-        ])->first();
-
-        if(!$category){
-            return Jasonres::error('REQ002');
-        } else {
-            return Jasonres::success('', $category);
+        try {
+            $category = ResourcesCategory::where([
+                'id' => $request->id,
+                'organization_id' => $request->organization_id
+            ])->first();
+    
+            if($category){
+                return Jasonres::success('', $category);
+            } else {
+                return Jasonres::error('REQ002');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
         }
-
     }
 
     public function create (Request $request) {
 
-        $validationData = $request->validate([
-            'name' => 'required|string'
-        ]);
-
-        $new_category = new ResourcesCategory;
-        $new_category->name = $request->name;
-        $new_category->organization_id = $request->organization_id;
-        if($new_category->save()){
-            return Jasonres::success('Category successfully created', $new_category);
+        try {
+            $validationData = $request->validate([
+                'name' => 'required|string'
+            ]);
+    
+            $new_category = new ResourcesCategory;
+            $new_category->name = $request->name;
+            $new_category->organization_id = $request->organization_id;
+            if($new_category->save()){
+                return Jasonres::success('Category successfully created', $new_category);
+            } else {
+                return Jasonres::error('SRV001');
+            }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
         }
     }
 
     public function update (Request $request) {
-
-        $validationData = $request->validate([
-            'name' => 'required|string'
-        ]);
-
-        $category = ResourcesCategory::where([
-            'id' => $request->id,
-            'organization_id' => $request->organization_id
-        ])->first();
-
-        if($category){
-            $category->name = $request->name;
-            if($category->save()){
-                return Jasonres::success('Resource category successfully updated', $category);
-            } else{
-                return Jasonres::error('SRV001');
-            }
-        } else {
-            return Jasonres::error('REQ002');
+        
+        try {
+            
+                    $validationData = $request->validate([
+                        'name' => 'required|string'
+                    ]);
+            
+                    $category = ResourcesCategory::where([
+                        'id' => $request->id,
+                        'organization_id' => $request->organization_id
+                    ])->first();
+            
+                    if($category){
+                        $category->name = $request->name;
+                        if($category->save()){
+                            return Jasonres::success('Resource category successfully updated', $category);
+                        } else{
+                            return Jasonres::error('SRV001');
+                        }
+                    } else {
+                        return Jasonres::error('REQ002');
+                    }
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
         }
-
     }
 
     public function destroy (Request $request) {
 
-        $category = ResourcesCategory::where([
-            'id' => $request->id,
-            'organization_id' => $request->organization_id
-        ])->first();
-
-        if($category){
-            if($category->delete()){
-                return Jasonres::success('Successfully deleted', []);
+        try {
+            $category = ResourcesCategory::where([
+                'id' => $request->id,
+                'organization_id' => $request->organization_id
+            ])->first();
+    
+            if($category){
+                if($category->delete()){
+                    return Jasonres::success('Successfully deleted', []);
+                } else {
+                    return Jasonres::error('SRV001');
+                }
             } else {
-                return Jasonres::error('SRV001');
+                return Jasonres::error('REQ002');
             }
-        } else {
-            return Jasonres::error('REQ002');
+        } catch (Exception $e) {
+            return Jasonres::error('SRV001');
         }
-
     }
 }

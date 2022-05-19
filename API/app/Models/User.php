@@ -118,14 +118,19 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function updatePermissions($organization_id, Array $permissions_by_module){
-        foreach($permissions_by_module as $new_permission){
-            $permission = Permission::where([
-                'user_id' => $this->id,
-                'organization_id' => $organization_id,
-                'module_id' => $new_permission['module_id']
-            ])->first();
-            $permission->permission_level = $new_permission['permission_level'];
-            $permission->save();
+        try {
+            foreach($permissions_by_module as $new_permission){
+                $permission = Permission::where([
+                    'user_id' => $this->id,
+                    'organization_id' => $organization_id,
+                    'module_id' => $new_permission['module_id']
+                ])->first();
+                $permission->permission_level = $new_permission['permission_level'];
+                $permission->save();
+            }
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 

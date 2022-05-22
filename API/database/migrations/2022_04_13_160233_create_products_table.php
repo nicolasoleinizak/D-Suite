@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('short_description');
             $table->string('long_description')->nullable();
-            $table->timestamps();
+            $table->float('stock')->default(0);
             $table  ->foreignId('organization_id')
                     ->constrained('organizations')
                     ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('price');
             $table->string('unit');
+            $table->float('stock')->default(0);
             $table  ->foreignId('organization_id')
                     ->constrained('organizations')
                     ->onDelete('cascade');

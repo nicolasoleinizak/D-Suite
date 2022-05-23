@@ -20,7 +20,9 @@ class ModuleSeeder extends Seeder
             'products',
             'clients',
             'resources',
-            'suppliers'
+            'suppliers',
+            'stock',
+            'prices'
         ];
 
         foreach($modules_names as $module_name){

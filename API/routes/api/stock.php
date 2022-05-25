@@ -10,7 +10,7 @@ Route::controller(StockController::class)->group( function () {
             Route::get('/{organization_id}/stock/{type}/{id}', 'retrieve');
         });
         Route::middleware(['has.permission:6,2'])->group( function () {
-            Route::put('/{organization_id}/stock/{id}', 'update');
+            Route::put('/{organization_id}/stock/{type}/{id}', 'update');
             Route::put('/{organization_id}/stock/', 'updateAll');
         });
     });

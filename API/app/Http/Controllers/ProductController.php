@@ -19,7 +19,11 @@ class ProductController extends Controller
         try {
             $products = Product::where([
                 'organization_id' => $request->organization_id
-            ])->get();
+            ])  ->with('categories')
+                ->select([
+                    'id', 'short_description', 'long_description'
+                    ])
+                ->get();
 
             if($products){
                 return Jasonres::success('', $products);
@@ -74,7 +78,11 @@ class ProductController extends Controller
             $product = Product::where([
                 'id' => $request->product_id,
                 'organization_id' => $request->organization_id
-            ])->with('categories')->get();
+            ])  ->with('categories')
+                ->select([
+                    'id', 'short_description', 'long_description'
+                    ])
+                ->get();
 
             if($product){
                 return Jasonres::success('', $product);

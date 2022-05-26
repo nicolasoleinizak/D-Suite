@@ -14,9 +14,13 @@ class StockController extends Controller
 
             $products = Product::where([
                 'organization_id' => $request->organization_id
+            ])->select([
+                'id', 'short_description', 'stock'
             ])->get();
             $resources = Resource::where([
                 'organization_id' => $request->organization_id
+            ])->select([
+                'id', 'name', 'stock'
             ])->get();
             if($products && $resources){
                 $items = [];

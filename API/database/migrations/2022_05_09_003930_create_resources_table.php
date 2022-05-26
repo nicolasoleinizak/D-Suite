@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('price');
             $table->string('unit');
             $table->float('stock')->default(0);
             $table  ->foreignId('organization_id')
                     ->constrained('organizations')
                     ->onDelete('cascade');
+            $table->float('price');
             $table->timestamps();
         });
     }

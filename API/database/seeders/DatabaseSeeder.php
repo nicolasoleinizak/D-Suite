@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SupplierSeeder::class,
             ResourcesCategorySeeder::class,
-            ResourceSeeder::class
+            ResourceSeeder::class,
+            PriceModifierSeeder::class,
         ]);
     }
 }

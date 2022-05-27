@@ -20,7 +20,7 @@ class IncomeController extends Controller
                 array_push($params, ['date', '<', $request->before]);
             }
             $incomes = Income::where($params)
-                ->select('id', 'date', 'type', 'quantity', 'concept', 'value', 'created_at')
+                ->select('id', 'date', 'type', 'quantity', 'concept', 'value')
                 ->get();
             if($incomes){
                 return Jasonres::success('', $incomes);
@@ -37,7 +37,8 @@ class IncomeController extends Controller
             $income = Income::where([
                 'organization_id' => $request->organization_id,
                 'id' => $request->id
-            ])->first();
+            ])  ->select('id', 'date', 'type', 'quantity', 'concept', 'value')
+                ->first();
             if($income){
                 return Jasonres::success('', $income);
             } else {

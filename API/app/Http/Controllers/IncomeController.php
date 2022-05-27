@@ -34,7 +34,15 @@ class IncomeController extends Controller
 
     public function retrieve (Request $request){
         try {
-
+            $income = Income::where([
+                'organization_id' => $request->organization_id,
+                'id' => $request->id
+            ])->first();
+            if($income){
+                return Jasonres::success('', $income);
+            } else {
+                return Jasonres::error('REQ002');
+            }
         } catch (Exception $e) {
             return Jasonres::error('SRV001');
         }
@@ -42,7 +50,24 @@ class IncomeController extends Controller
 
     public function create (Request $request){
         try {
-
+            $request->validate([
+                'type' => 'string|required',
+                'quantity' => 'number',
+                'concept' => 'string|required',
+                'value' => 'number|required',
+                'organization_id' => 'number|required'
+            ]);
+            $income = new Income;
+            $income->type = $request->type;
+            $income->quantity = isset($request->quantity)? $request->quantity : 1;
+            $income->concept = $request->concept;
+            $income->value = $request->value;
+            $income->organization_id = $request->organization_id;
+            if($income->save()){
+                return Jasonres::success('Income created successfully', $income);
+            } else {
+                return Jasonres::error('SRV001');
+            }
         } catch (Exception $e) {
             return Jasonres::error('SRV001');
         }
@@ -50,7 +75,23 @@ class IncomeController extends Controller
 
     public function update (Request $request){
         try {
-
+            $income = Income::where([
+                'organization_id' => $request->organization_id,
+                'id' => $request->id
+            ])->first();
+            if($income){
+                $income->type = isset($request->type)? $request->type : $income->type;
+                $income->quantity = isset($request->quantity)? $request->quantity : $income->quantity;
+                $income->concept = isset($request->concept)? $request->concept : $income->concept;
+                $income->value = isset($request->value)? $request->value : $income->value;
+                if($income->save()){
+                    return Jasonres::success('Income created successfully', $income);
+                } else {
+                    return Jasonres::error('SRV001');
+                }
+            } else {
+                return Jasonres::error('REQ001');
+            }
         } catch (Exception $e) {
             return Jasonres::error('SRV001');
         }
@@ -58,7 +99,15 @@ class IncomeController extends Controller
 
     public function destroy (Request $request){
         try {
-
+            $income = Income::where([
+                'organization_id' => $request->organization_id,
+                'id' => $request->id
+            ]);
+            if($income->delete()){
+                return Jasonres::success('Income successfully deleted');
+            } else {
+                return Jasonres::error('SRV001');
+            }
         } catch (Exception $e) {
             return Jasonres::error('SRV001');
         }

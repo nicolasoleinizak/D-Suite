@@ -19,9 +19,10 @@ class IncomeController extends Controller
             if($request->before){
                 array_push($params, ['date', '<', $request->before]);
             }
+            $limit = isset($request->limit)? $request->limit : 25;
             $incomes = Income::where($params)
                 ->select('id', 'date', 'type', 'quantity', 'concept', 'value')
-                ->get();
+                ->paginate($limit);
             if($incomes){
                 return Jasonres::success('', $incomes);
             } else {
@@ -51,15 +52,15 @@ class IncomeController extends Controller
 
     public function create (Request $request){
         try {
-            $request->validate([
+            $valid_fields = $request->validate([
                 'type' => 'string|required',
-                'quantity' => 'number',
+                'quantity' => 'numeric',
                 'concept' => 'string|required',
-                'value' => 'number|required',
-                'organization_id' => 'number|required'
+                'value' => 'numeric|required'
             ]);
             $income = new Income;
             $income->type = $request->type;
+            $income->date = $request->date;
             $income->quantity = isset($request->quantity)? $request->quantity : 1;
             $income->concept = $request->concept;
             $income->value = $request->value;
@@ -82,6 +83,7 @@ class IncomeController extends Controller
             ])->first();
             if($income){
                 $income->type = isset($request->type)? $request->type : $income->type;
+                $income->date = isset($request->date)? $request->date : $income->date;
                 $income->quantity = isset($request->quantity)? $request->quantity : $income->quantity;
                 $income->concept = isset($request->concept)? $request->concept : $income->concept;
                 $income->value = isset($request->value)? $request->value : $income->value;

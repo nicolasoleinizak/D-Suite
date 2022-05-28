@@ -19,9 +19,10 @@ class ExpenseController extends Controller
             if($request->before){
                 array_push($params, ['date', '<', $request->before]);
             }
+            $limit = isset($request->limit)? $request->limit : 25;
             $expenses = Expense::where($params)
                 ->select('id', 'date', 'type', 'concept', 'value')
-                ->get();
+                ->paginate($limit);
             if($expenses){
                 return Jasonres::success('', $expenses);
             } else {

@@ -50,11 +50,12 @@ class ExpenseController extends Controller
         try {
             $request->validate([
                 'type' => 'string|required',
+                'date' => 'date|required',
                 'concept' => 'string|required',
-                'value' => 'number|required',
-                'organization_id' => 'number|required'
+                'value' => 'numeric|required',
             ]);
             $expense = new Expense;
+            $expense->date = $request->date;
             $expense->type = $request->type;
             $expense->concept = $request->concept;
             $expense->value = $request->value;
@@ -79,7 +80,7 @@ class ExpenseController extends Controller
                 $expense->concept = isset($request->concept)? $request->concept : $expense->concept;
                 $expense->value = isset($request->value)? $request->value : $expense->value;
                 if($expense->save()){
-                    return Jasonres::success('Income created successfully', $income);
+                    return Jasonres::success('Income created successfully', $expense);
                 } else {
                     return Jasonres::error('SRV001');
                 }
@@ -90,7 +91,7 @@ class ExpenseController extends Controller
             return Jasonres::error('SRV001');
         }
     }
-    public function delete(Request $request){
+    public function destroy(Request $request){
         try {
             $expense = Expense::where([
                 'organization_id' => $request->organization_id,

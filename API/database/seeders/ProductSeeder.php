@@ -30,6 +30,11 @@ class ProductSeeder extends Seeder
                 'short_description' => 'Caja de 6 alfajores',
                 'products_categories_id' => [ProductsCategory::where('name', 'alfajores')->first()->id],
                 'organization_id' => Organization::all()->first()->id
+            ],
+            [
+                'short_description' => 'Alfajor individual',
+                'products_categories_id' => [ProductsCategory::where('name', 'alfajores')->first()->id],
+                'organization_id' => Organization::all()->first()->id
             ]
         ];
 

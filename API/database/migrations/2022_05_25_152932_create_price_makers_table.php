@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('price_maker', function (Blueprint $table) {
+        Schema::create('price_makers', function (Blueprint $table) {
             $table->id();
+            $table  ->foreignId('product_id')
+                    ->constrained('products')
+                    ->onDelete('cascade');
             $table->string('description');
             $table->string('formula');
             $table->double('result');

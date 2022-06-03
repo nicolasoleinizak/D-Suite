@@ -13,6 +13,7 @@ Route::middleware(['api'])->group( function () {
         Route::middleware(['has.permission:4,2'])->group( function () {
             Route::post('/{organization_id}/resources/', 'create');
             Route::put('/{organization_id}/resources/{id}', 'update');
+            Route::put('/{organization_id}/resources/', 'updateMany');
             Route::delete('/{organization_id}/resources/{id}', 'destroy');
         });
     });

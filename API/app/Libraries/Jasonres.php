@@ -15,7 +15,8 @@ class Jasonres{
     public static function error ($error_code, $alternative_message = '') {
 
         if(ErrorMessage::code_exists($error_code)){
-            $message = ErrorMessage::get($error_code);
+            $message = ErrorMessage::get($error_code).
+                $alternative_message != ''? '. '.$alternative_message : '.';
         }
         elseif($alternative_message != ''){
             $message = $alternative_message;
